@@ -1,0 +1,95 @@
+% \input utf8-t1
+\documentclass[12pt,titlepage,a4paper]{extarticle}
+
+% ------ PACKAGES ------
+
+\usepackage[czech]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[paper=a4paper,top=3cm,left=2cm,right=2cm,bottom=2cm,includefoot]{geometry} % odsazení a velikosti stránek
+\usepackage[bookmarksopen,bookmarks,pdfauthor={Josef Kolar},pdftitle={},pdfsubject={},pdfkeywords={}]{hyperref} % odkazy
+\usepackage[titles]{tocloft} % pro stylování obsahu
+\usepackage{color} % barvy
+\usepackage{xcolor} % vytváření barev
+\usepackage{graphicx} % načítání grefiky
+\usepackage{float} % podpora pro figure s H pozicí
+\usepackage{svg} % inludesvg
+\usepackage{wrapfig} % figure v textu
+\usepackage{titling} % theauthor, thetitle
+\usepackage{fancyhdr} % zápatí, záhlaví
+\usepackage{lastpage} % lastpage label
+\usepackage{bookmark} % nenutnost spouštět dvakrát pro korektní reference
+\usepackage{pdfpages} % inlude pdf
+\usepackage{titlesec} % \section na nové stránce
+\usepackage{setspace}
+\usepackage{datetime}
+\usepackage{pdflscape}
+
+
+% ------ CONFIGURATION ------
+
+% default width of svg
+\graphicspath{ {assets/} }
+
+% reset ref section names
+\def\sectionautorefname{}
+\def\figureautorefname{}
+
+\title{Projekt IUS - Model informačního systému}
+\author{Josef Kolář \emph{xkolar71}}
+\date{\today}
+
+\lhead{Projekt IUS - Model informačního systému}
+\chead{}
+\rhead{Internetový obchod s pastelkami a skicáky}
+\lfoot{Josef Kolář (\emph{xkolar71})}
+\cfoot{}
+\rfoot{Strana \thepage \hspace{1pt} z~\pageref*{LastPage}}
+
+\addtolength{\headheight}{0pt}
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\definecolor{linkcolor}{HTML}{CC0011}
+\colorlet{keywordstyle}{linkcolor}
+
+% ------ CUSTOM COMMANDS ------
+
+% ------ HYPERREF SETUP ------
+\hypersetup{
+	colorlinks,
+	linkcolor=linkcolor,
+	citecolor=linkcolor,
+	urlcolor=linkcolor,
+  bookmarks,
+  bookmarksopen,
+  bookmarksdepth=2
+}
+\begin{document}
+\pagestyle{fancy}
+
+\input{_titlepage}
+% \input{_titulek_soc.tex}
+
+\newpage
+
+{\titleformat{\section}[block]{\Large\bfseries\filcenter}{}{0pt}{}
+\begin{landscape}
+	\begin{figure}[H]
+		\section{Diagram případů užití}
+		\centering
+		% \input{assets/uc}
+		% \includesvg[width=\hsize]{assets/uc}
+		\includegraphics[width=\hsize]{assets/uc.pdf}
+	\end{figure}
+\end{landscape}
+\begin{landscape}
+	\begin{figure}[H]
+		\section{ER diagram}
+		\centering
+		% \input{assets/er}
+		% \includesvg[width=\hsize]{assets/uc}
+		\includegraphics[width=\hsize]{assets/er.pdf}
+	\end{figure}
+\end{landscape}
+
+\end{document}
