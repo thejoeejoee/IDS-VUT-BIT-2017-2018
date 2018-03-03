@@ -6,7 +6,7 @@
 \usepackage[czech]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[paper=a4paper,top=3cm,left=2cm,right=2cm,bottom=2cm,includefoot]{geometry} % odsazení a velikosti stránek
-\usepackage[bookmarksopen,bookmarks,pdfauthor={Josef Kolar},pdftitle={},pdfsubject={},pdfkeywords={}]{hyperref} % odkazy
+\usepackage[bookmarksopen,bookmarks,pdfauthor={Iva Kavankova, Josef Kolar},pdftitle={},pdfsubject={},pdfkeywords={}]{hyperref} % odkazy
 \usepackage[titles]{tocloft} % pro stylování obsahu
 \usepackage{color} % barvy
 \usepackage{xcolor} % vytváření barev
@@ -34,14 +34,14 @@
 \def\sectionautorefname{}
 \def\figureautorefname{}
 
-\title{Projekt IUS - Model informačního systému}
-\author{Josef Kolář \emph{xkolar71}}
+\title{Projekt IDS - 1. část}
+\author{Iva Kavánková \emph{xkavan05}, Josef Kolář \emph{xkolar71}}
 \date{\today}
 
-\lhead{Projekt IUS - Model informačního systému}
+\lhead{Projekt IDS - 1. část}
 \chead{}
 \rhead{Internetový obchod s pastelkami a skicáky}
-\lfoot{Josef Kolář (\emph{xkolar71})}
+\lfoot{\emph{xkavan05}, \emph{xkolar71}}
 \cfoot{}
 \rfoot{Strana \thepage \hspace{1pt} z~\pageref*{LastPage}}
 
@@ -65,31 +65,27 @@
   bookmarksdepth=2
 }
 \begin{document}
-\pagestyle{fancy}
-
 \input{_titlepage}
-% \input{_titulek_soc.tex}
-
-\newpage
-
-{\titleformat{\section}[block]{\Large\bfseries\filcenter}{}{0pt}{}
-\begin{landscape}
-	\begin{figure}[H]
-		\section{Diagram případů užití}
-		\centering
-		% \input{assets/uc}
-		% \includesvg[width=\hsize]{assets/uc}
-		\includegraphics[width=\hsize]{assets/uc.pdf}
-	\end{figure}
-\end{landscape}
-\begin{landscape}
-	\begin{figure}[H]
-		\section{ER diagram}
-		\centering
-		% \input{assets/er}
-		% \includesvg[width=\hsize]{assets/uc}
-		\includegraphics[width=\hsize]{assets/er.pdf}
-	\end{figure}
-\end{landscape}
-
+\pagestyle{fancy}
+{
+	\titleformat{\section}[block]{\Large\bfseries\filcenter}{}{0pt}{}
+	\begin{landscape}
+		\begin{figure}[H]
+			\section{Diagram datového modelu}
+			\centering
+			% \input{assets/er}
+			% \includesvg[width=\hsize]{assets/uc}
+			\includegraphics[width=\hsize]{assets/er.pdf}
+		\end{figure}
+		
+		\begin{figure}[H]
+			\section{Diagram případů užití}
+			\centering
+			% \input{assets/uc}
+			% \includesvg[width=\hsize]{assets/uc}
+			\includegraphics[width=\hsize]{assets/uc.pdf}
+		\end{figure}
+	\end{landscape}
+	
+}
 \end{document}

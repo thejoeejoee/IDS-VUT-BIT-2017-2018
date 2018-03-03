@@ -6,4 +6,5 @@ all:
 	- pdflatex -shell-escape docs.tex
 	- pdflatex -shell-escape docs.tex
 	- pdflatex -shell-escape docs.tex
-	- evince docs.pdf &2> /dev/null &
+	- mv docs.pdf xkavan05_xkolar71.pdf
+	- evince xkavan05_xkolar71.pdf &2> /dev/null &
