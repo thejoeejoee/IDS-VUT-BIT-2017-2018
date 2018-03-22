@@ -115,7 +115,12 @@ INSERT INTO "supplier" ("name", "phone", "email") VALUES ('Papirnictvi Litovel',
 INSERT INTO "supplier" ("name", "phone", "email")
 VALUES ('Potreby pro malire Prerov', '733256999', 'malirskepotreby@prerov.cz');
 INSERT INTO "supplier" ("name", "phone", "email") VALUES ('TESCO', '570248596', 'order@tesco.com');
-INSERT INTO "supplier" ("name", "phone", "email") VALUES ('Svet pastele', '720185469', 'pastelky@pastelky.cz');
+INSERT INTO "supplier" ("name", "phone", "email") VALUES ('Svet pastelek', '720185469', 'pastelky@pastelky.cz');
+INSERT INTO "supplier" ("name", "phone", "email") VALUES ('Mame vse', '752869485', 'vse@vsechno.cz');
+INSERT INTO "supplier" ("name", "phone", "email") VALUES ('Obchudek', '608598632', 'obchudek@seznam.cz');
+INSERT INTO "supplier" ("name", "phone", "email") VALUES ('Penny Market', '607589632', 'dodatel@penny.cz');
+INSERT INTO "supplier" ("name", "phone", "email") VALUES ('Dutosvarcova korporace', '123456789', 'dutosvarc@disney.cz');
+INSERT INTO "supplier" ("name", "phone", "email") VALUES ('OBI', '777456825', 'karel@obi.com');
 
 INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Dlouhe pastelky', 150, 1);
 INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Kratsi pastelky', 120, 1);
@@ -148,16 +153,33 @@ INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (13, 1,
 INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (14, 2, 30, 28);
 
 INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky velke', 500, 2);
-INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky vetsi', 560, 2);
+INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky vetsi', 560, 1);
+INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky barevne', 580, 2);
+INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky modre', 565, 2);
+INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky zlute', 560, 3);
+INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky zelene', 570, 2);
+INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky ruzove', 600, 4);
+INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky fialove', 555, 3);
+INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky bile', 575, 2);
 
 INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (6, 150, 'XS', 25);
 INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (7, 180, 'XL', 35);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (8, 155, 'M', 50);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (7, 170, 'XL', 5);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (10, 181, 'S', 28);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (11, 190, 'S', 32);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (12, 180, 'XL', 42);
 
 INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Pastelky super, made in China', 238 * .2, 3);
 INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Pastelky dobre, made in China', 100 * .2, 3);
 
 INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (8, 1, 30, 12);
 INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (9, 2, 32, 8);
+INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (7, 1, 65, 10);
+INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (1, 5, 42, 12);
+INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (2, 8, 55, 18);
+INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (4, 4, 42, 20);
+INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (5, 3, 68, 9);
 
 INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky velke, made in China', 500 * .2, 3);
 INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky vetsi, made in China', 560 * .2, 3);
@@ -186,6 +208,22 @@ INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone"
 VALUES
   ('petram@seznam.cz', '$2a$04$CtIBCZmTE1IS0PlZ8AE2c.Y3rcRUWyXh5WW55B6YcEqNtjeI/2fHC', 'Petra', 'Moudra', '789456123',
    'Masarykova', 'Prerov', 78950);
+INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
+VALUES
+  ('karel@seznam.cz', '$2a$04$1WhGfU335qo7hP0pchy4k.DyswQqYxJ/qVepJov.CiqpF3GzDvTD2', 'Karel', 'Karlovic', '589624859',
+   'Modra', 'Brno', 7604);
+INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
+VALUES
+  ('pavel.kohout@abc.cz', '$2a$04$ffqhhOdWrHqT61OBt0iFZuyvFNqW4JHlRbYoOY8PGpkDpevChqXMq', 'Pavel', 'Kohout', '577486526',
+   'Hroudova', 'Breclav', 78236);
+INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
+VALUES
+  ('hermelina@novakova.cz', '$2a$04$jf78RFIBF7tsaIFcphvwA.HcsqMXnuYph9nMQSSC7MBu3Umj52h8q', 'Hermelina', 'Novakova', '586987569',
+   'Husitska', 'Brno', 73005);
+INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
+VALUES
+  ('stanislav@svarak.cz', '$2a$04$xnu67lhka1UGsATE/idR7uWSCrXzakrgB4DsVxxR/85o7ea8hUN4a', 'Stanislav', 'Svarak', '148579625',
+   'Sumavska', 'Brno', 74002);
 
 
 INSERT INTO "order" ("payment_method", "note", "state", "user_id")
@@ -227,3 +265,31 @@ INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES 
 INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 2, 7, 3);
 INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 3, 3, 4);
 INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 4, 10, 11);
+
+INSERT INTO "order" ("payment_method", "note", "state", "user_id")
+VALUES (2, 'co nejdrive prosim', 1, 3);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (5, 8, 9, 2);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (3, 2, 4, 3);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (4, 10, 3, 6);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (5, 4, 10, 11);
+
+INSERT INTO "order" ("payment_method", "note", "state", "user_id")
+VALUES (2, 'nevolat, psat sms, dekuji', 1, 2);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (4, 1, 10, 2);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 2, 7, 8);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (4, 3, 9, 4);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 5, 10, 10);
+
+INSERT INTO "order" ("payment_method", "note", "state", "user_id")
+VALUES (2, 'nerozbit prosim', 1, 2);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (9, 1, 10, 1);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 1, 8, 3);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (9, 3, 3, 4);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 4, 7, 11);
+
+INSERT INTO "order" ("payment_method", "note", "state", "user_id")
+VALUES (2, 'specha, mam to pro manzelku', 2, 2);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (4, 1, 4, 2);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 2, 7, 3);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (4, 3, 4, 4);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 4, 10, 8);
