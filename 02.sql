@@ -112,7 +112,8 @@ INSERT INTO "supplier" ("name", "phone", "email") VALUES ('OLC Systems', '+42012
 INSERT INTO "supplier" ("name", "phone", "email") VALUES ('Sony corp', '+236874521369', 'sony@email.cz');
 INSERT INTO "supplier" ("name", "phone", "email") VALUES ('ASUS tech', '852369854', 'asus@asus.com');
 INSERT INTO "supplier" ("name", "phone", "email") VALUES ('Papirnictvi Litovel', '777256958', 'papir@litovel.cz');
-INSERT INTO "supplier" ("name", "phone", "email") VALUES ('Potreby pro malire Prerov', '733256999', 'malirskepotreby@prerov.cz');
+INSERT INTO "supplier" ("name", "phone", "email")
+VALUES ('Potreby pro malire Prerov', '733256999', 'malirskepotreby@prerov.cz');
 INSERT INTO "supplier" ("name", "phone", "email") VALUES ('TESCO', '570248596', 'order@tesco.com');
 INSERT INTO "supplier" ("name", "phone", "email") VALUES ('Svet pastele', '720185469', 'pastelky@pastelky.cz');
 
@@ -164,18 +165,27 @@ INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky vetsi, m
 INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (10, 80, 'S', 50);
 INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (11, 90, 'L', 45);
 
+-- used bcrypt with 4 iterations, random passwords
 INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
-VALUES ('sony@mail.cz', 'hash_TODO', 'Sony', 'Nguyen', '125745632', 'Macharova', 'Olomouc', 77900);
+VALUES ('sony@mail.cz', '$2a$04$KGnvHtOiSxaeIdwUhxQNqu7QAjKU8.h939qezQdQPQaO2FPsOVJVm', 'Sony', 'Nguyen', '125745632',
+        'Macharova', 'Olomouc', 77900);
 INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
-VALUES ('joe@email.cz', 'hash_TODO', 'Joe', 'Novak', '741528963', 'Novakova', 'Brno', 77200);
+VALUES ('joe@email.cz', '$2a$04$kl8SshrJ5ZDOY6BOqMo3aetzUHMlq8R2nviN.bY33N32gk504kn8K', 'Joe', 'Novak', '741528963',
+        'Novakova', 'Brno', 77200);
 INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
-VALUES ('franta@jozka.cz', 'hash_TODO', 'Frantisek', 'Jemenek', '789523632', 'Bratislavska', 'Prerov', 77800);
+VALUES ('franta@jozka.cz', '$2a$04$Kacb/3HfcjBVBMfPwuQivusx3nXg1Xax0HpoaI5.wqmojRMn6pKDu', 'Frantisek', 'Jemenek',
+        '789523632', 'Bratislavska', 'Prerov', 77800);
 INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
-VALUES ('jana.kolarova@kolar.cz', 'hash_TODO', 'Jana', 'Kolarova', '+420585696363', 'nam. Republiky', 'Olomouc', 74802);
+VALUES ('jana.kolarova@kolar.cz', '$2a$04$FkfGBxae7Ic2VBcrm9VI6eZRqTYC3CIXbI7/.EQPLOqmX4jfaD.oK', 'Jana', 'Kolarova',
+        '+420585696363', 'nam. Republiky', 'Olomouc', 74802);
 INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
-VALUES ('roman.maxmilian@kolar.cz', 'hash_TODO', 'Roman', 'Maxmilian', '+789456123', 'Uzka', 'Nezamyslice', 78411);
+VALUES
+  ('roman.maxmilian@kolar.cz', '$2a$04$9Co7Bf7ohM.fX4GBO9VCkeiuBgW5TRGz3v3pRbJsjZR0CN/LKZiqS', 'Roman', 'Maxmilian',
+   '+789456123', 'Uzka', 'Nezamyslice', 78411);
 INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
-VALUES ('petram@seznam.cz', 'hash_TODO', 'Petra', 'Moudra', '789456123', 'Masarykova', 'Prerov', 78950);
+VALUES
+  ('petram@seznam.cz', '$2a$04$CtIBCZmTE1IS0PlZ8AE2c.Y3rcRUWyXh5WW55B6YcEqNtjeI/2fHC', 'Petra', 'Moudra', '789456123',
+   'Masarykova', 'Prerov', 78950);
 
 
 INSERT INTO "order" ("payment_method", "note", "state", "user_id")
@@ -194,7 +204,6 @@ INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES 
 INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (3, 2, 2, 4);
 INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (3, 3, 2, 6);
 INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (3, 5, 2, 8);
-
 
 
 INSERT INTO "order" ("payment_method", "note", "state", "user_id")
