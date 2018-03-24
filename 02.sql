@@ -293,3 +293,11 @@ INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES 
 INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 2, 7, 3);
 INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (4, 3, 4, 4);
 INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 4, 10, 8);
+
+
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (3, 'fakt super nakup!', 1, 1);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (1, 'nejlepsi produkt!', 2, 2);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id")
+VALUES (5, 'totalni katastrofa, nedoporucuji!', 3, 3);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (2, 'celkem dobry produkt', 4, 4);
+
