@@ -18,7 +18,8 @@ CREATE TABLE "user"
   "phone"         VARCHAR2(32),
   "street"        VARCHAR2(64),
   "city"          VARCHAR2(64),
-  "postcode"      NUMBER
+  "postcode"      NUMBER,
+  CONSTRAINT postcode_check CHECK ("postcode" > 0 AND "postcode" <= 99999)
 );
 
 CREATE TABLE "order"
@@ -32,7 +33,10 @@ CREATE TABLE "order"
   "note"           VARCHAR2(256),
   "state"          NUMBER,
 
-  "user_id"        NUMBER           NOT NULL
+  "user_id"        NUMBER           NOT NULL,
+
+  CONSTRAINT payment_method_enum_check CHECK ("payment_method" IN (0, 1, 2, 3)),
+  CONSTRAINT state_enum_check CHECK ("payment_method" IN (0, 1, 2, 3, 4, 5))
 );
 
 CREATE TABLE "order_item"
@@ -214,15 +218,18 @@ VALUES
    'Modra', 'Brno', 7604);
 INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
 VALUES
-  ('pavel.kohout@abc.cz', '$2a$04$ffqhhOdWrHqT61OBt0iFZuyvFNqW4JHlRbYoOY8PGpkDpevChqXMq', 'Pavel', 'Kohout', '577486526',
+  ('pavel.kohout@abc.cz', '$2a$04$ffqhhOdWrHqT61OBt0iFZuyvFNqW4JHlRbYoOY8PGpkDpevChqXMq', 'Pavel', 'Kohout',
+   '577486526',
    'Hroudova', 'Breclav', 78236);
 INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
 VALUES
-  ('hermelina@novakova.cz', '$2a$04$jf78RFIBF7tsaIFcphvwA.HcsqMXnuYph9nMQSSC7MBu3Umj52h8q', 'Hermelina', 'Novakova', '586987569',
+  ('hermelina@novakova.cz', '$2a$04$jf78RFIBF7tsaIFcphvwA.HcsqMXnuYph9nMQSSC7MBu3Umj52h8q', 'Hermelina', 'Novakova',
+   '586987569',
    'Husitska', 'Brno', 73005);
 INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
 VALUES
-  ('stanislav@svarak.cz', '$2a$04$xnu67lhka1UGsATE/idR7uWSCrXzakrgB4DsVxxR/85o7ea8hUN4a', 'Stanislav', 'Svarak', '148579625',
+  ('stanislav@svarak.cz', '$2a$04$xnu67lhka1UGsATE/idR7uWSCrXzakrgB4DsVxxR/85o7ea8hUN4a', 'Stanislav', 'Svarak',
+   '148579625',
    'Sumavska', 'Brno', 74002);
 
 
@@ -251,7 +258,7 @@ INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES 
 INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (4, 3, 1, 7);
 
 INSERT INTO "order" ("payment_method", "note", "state", "user_id")
-VALUES (1, '---', 1, 2);
+VALUES (1, '---', 3, 2);
 INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (5, 1, 2, 5);
 INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (5, 2, 10, 8);
 
@@ -267,34 +274,65 @@ INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES 
 INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 4, 10, 11);
 
 INSERT INTO "order" ("payment_method", "note", "state", "user_id")
-VALUES (2, 'co nejdrive prosim', 1, 3);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (5, 8, 9, 2);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (3, 2, 4, 3);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (4, 10, 3, 6);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (5, 4, 10, 11);
+VALUES (2, 'co nejdrive prosim', 2, 3);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (8, 1, 9, 2);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (8, 2, 4, 3);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (8, 3, 3, 6);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (8, 4, 10, 11);
 
 INSERT INTO "order" ("payment_method", "note", "state", "user_id")
-VALUES (2, 'nevolat, psat sms, dekuji', 1, 2);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (4, 1, 10, 2);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 2, 7, 8);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (4, 3, 9, 4);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 5, 10, 10);
+VALUES (2, 'nevolat, psat sms, dekuji', 2, 2);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (9, 1, 10, 2);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (9, 2, 7, 8);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (9, 3, 9, 4);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (9, 4, 10, 10);
 
 INSERT INTO "order" ("payment_method", "note", "state", "user_id")
 VALUES (2, 'nerozbit prosim', 1, 2);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (9, 1, 10, 1);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 1, 8, 3);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (9, 3, 3, 4);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 4, 7, 11);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (10, 1, 10, 1);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (10, 2, 8, 3);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (10, 3, 3, 4);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (10, 4, 7, 11);
 
 INSERT INTO "order" ("payment_method", "note", "state", "user_id")
-VALUES (2, 'specha, mam to pro manzelku', 2, 2);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (4, 1, 4, 2);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 2, 7, 3);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (4, 3, 4, 4);
-INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (7, 4, 10, 8);
+VALUES (2, 'specha, mam to pro manzelku', 4, 2);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (11, 1, 4, 2);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (11, 2, 7, 3);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (11, 3, 4, 4);
+INSERT INTO "order_item" ("order_id", "order", "quantity", "product_id") VALUES (11, 4, 10, 8);
 
-
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (2, 'prumer', 1, 5);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (2, 'nuda', 2, 7);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (4, 'k nicemu', 3, 8);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (3, 'normalni kvalita', 4, 8);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (3, 'co sem mam napsat?', 5, 9);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (4, 'podprumerne', 6, 6);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (1, 'fakt dobre', 7, 3);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (2, 'standardni', 8, 2);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (3, 'nic moc', 9, 3);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (5, 'je mi to k nicemu', 4, 3);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (4, 'podivna vec', 2, 4);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (4, 'moc krátké', 5, 5);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (1, 'super pristup', 6, 8);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (1, 'dobrá kvalita', 3, 9);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (2, 'lepsi nez z Ciny', 2, 10);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (2, 'bez komentare', 1, 15);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (2, 'to se neda moc komentovat', 4, 13);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (3, 'vyhovuje', 10, 17);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (5, 'strasny produkt', 10, 18);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (4, 'nikdy vice', 10, 22);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (1, 'jsem spokojen', 8, 2);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (4, 'takova normalka', 5, 15);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (5, 'lepsi nez od konkurence', 5, 10);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (2, 'prumer', 4, 11);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (1, 'vyborne', 4, 12);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (2, 'male chybky', 7, 13);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (5, 'totalni hruza', 8, 14);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (4, 'lepsi vyhodit', 9, 15);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (1, 'funguji dobre', 6, 17);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (2, 'standardni', 3, 19);
+INSERT INTO "rating" ("mark", "description", "user_id", "product_id")
+VALUES (5, 'neda se nic napsat, totalni propadak!', 2, 1);
 INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (3, 'fakt super nakup!', 1, 1);
 INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (1, 'nejlepsi produkt!', 2, 2);
 INSERT INTO "rating" ("mark", "description", "user_id", "product_id")
