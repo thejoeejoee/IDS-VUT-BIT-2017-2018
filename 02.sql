@@ -11,15 +11,24 @@ DROP TABLE "supplier" CASCADE CONSTRAINTS;
 CREATE TABLE "user"
 (
   "id"            NUMBER GENERATED AS IDENTITY PRIMARY KEY,
-  "email"         VARCHAR2(64),
+  "email"         VARCHAR2(320) NOT NULL,
   "password_hash" VARCHAR2(128) NOT NULL,
   "first_name"    VARCHAR2(32),
   "last_name"     VARCHAR2(32),
   "phone"         VARCHAR2(32),
   "street"        VARCHAR2(64),
   "city"          VARCHAR2(64),
+  "birth_number"  VARCHAR2(12),
   "postcode"      NUMBER,
-  CONSTRAINT postcode_check CHECK ("postcode" > 0 AND "postcode" <= 99999)
+  CONSTRAINT postcode_check CHECK ("postcode" > 0 AND "postcode" <= 99999),
+  CONSTRAINT birth_number_check CHECK (
+    REGEXP_LIKE("birth_number", '[0-9]{2}[0156][0-9][0-3][0-9]/?[0-9]{3,4}') AND
+    MOD(CAST(REPLACE("birth_number", '/', '') AS NUMBER), 11) = 0
+
+  ),
+  CONSTRAINT user_birth_number_unique UNIQUE ("birth_number"),
+  CONSTRAINT user_email_unique UNIQUE ("email")
+
 );
 
 CREATE TABLE "order"
@@ -35,8 +44,8 @@ CREATE TABLE "order"
 
   "user_id"        NUMBER           NOT NULL,
 
-  CONSTRAINT payment_method_enum_check CHECK ("payment_method" IN (0, 1, 2, 3)),
-  CONSTRAINT state_enum_check CHECK ("payment_method" IN (0, 1, 2, 3, 4, 5))
+  CONSTRAINT order_payment_method_enum_check CHECK ("payment_method" IN (0, 1, 2, 3)),
+  CONSTRAINT order_state_enum_check CHECK ("payment_method" IN (0, 1, 2, 3, 4, 5))
 );
 
 CREATE TABLE "order_item"
@@ -54,7 +63,8 @@ CREATE TABLE "rating"
   "mark"        NUMBER NOT NULL,
   "description" NCLOB,
   "user_id"     NUMBER NOT NULL,
-  "product_id"  NUMBER NOT NULL
+  "product_id"  NUMBER NOT NULL,
+  CONSTRAINT rating_mark_check CHECK ("mark" > 0 AND "mark" <= 5)
 );
 
 CREATE TABLE "product"
@@ -62,23 +72,30 @@ CREATE TABLE "product"
   "id"          NUMBER GENERATED AS IDENTITY PRIMARY KEY,
   "name"        VARCHAR2(256),
   "price"       NUMBER NOT NULL,
-  "supplier_id" NUMBER NOT NULL
+  "supplier_id" NUMBER NOT NULL,
+
+  CONSTRAINT product_price_check CHECK ("price" >= 0)
 );
 
 CREATE TABLE "crayon"
 (
-  "product_id" NUMBER NOT NULL,
+  "product_id" NUMBER PRIMARY KEY,
   "type"       NUMBER,
   "quantity"   NUMBER,
-  "length"     NUMBER
+  "length"     NUMBER,
+  CONSTRAINT crayon_quantity_check CHECK ("quantity" > 0),
+  CONSTRAINT crayon_length_check CHECK ("length" > 0),
+  CONSTRAINT crayon_type_check CHECK ("type" IN (1, 2, 3, 4, 5))
 );
 
 CREATE TABLE "sketch"
 (
-  "product_id" NUMBER NOT NULL,
+  "product_id" NUMBER PRIMARY KEY,
   "weight"     NUMBER,
   "size"       VARCHAR2(16),
-  "quantity"   NUMBER
+  "quantity"   NUMBER,
+  CONSTRAINT sketch_quantity_check CHECK ("quantity" > 0),
+  CONSTRAINT sketch_weight_check CHECK ("weight" > 0)
 );
 
 CREATE TABLE "supplier"
@@ -86,12 +103,12 @@ CREATE TABLE "supplier"
   "id"    NUMBER GENERATED AS IDENTITY PRIMARY KEY,
   "name"  VARCHAR2(64),
   "phone" VARCHAR2(64),
-  "email" VARCHAR2(64)
+  "email" VARCHAR2(320),
+
+  CONSTRAINT supplier_email_unique UNIQUE ("email")
 );
 
 -- indexy a cizi klice
-CREATE UNIQUE INDEX user_email_uindex
-  ON "user" ("email");
 ALTER TABLE "order_item"
   ADD CONSTRAINT order_item_pk PRIMARY KEY ("order_id", "order");
 ALTER TABLE "order_item"
@@ -166,44 +183,39 @@ INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky ruzove',
 INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky fialove', 555, 3);
 INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky bile', 575, 2);
 
-INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (6, 150, 'XS', 25);
-INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (7, 180, 'XL', 35);
-INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (8, 155, 'M', 50);
-INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (7, 170, 'XL', 5);
-INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (10, 181, 'S', 28);
-INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (11, 190, 'S', 32);
-INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (12, 180, 'XL', 42);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (15, 150, 'XS', 25);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (16, 180, 'XL', 35);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (17, 155, 'M', 50);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (18, 170, 'XL', 5);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (19, 181, 'S', 28);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (20, 190, 'S', 32);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (21, 180, 'XL', 42);
 
 INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Pastelky super, made in China', 238 * .2, 3);
 INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Pastelky dobre, made in China', 100 * .2, 3);
 
-INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (8, 1, 30, 12);
-INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (9, 2, 32, 8);
-INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (7, 1, 65, 10);
-INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (1, 5, 42, 12);
-INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (2, 8, 55, 18);
-INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (4, 4, 42, 20);
-INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (5, 3, 68, 9);
+INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (22, 1, 30, 12);
+INSERT INTO "crayon" ("product_id", "type", "quantity", "length") VALUES (23, 2, 32, 8);
 
 INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky velke, made in China', 500 * .2, 3);
 INSERT INTO "product" ("name", "price", "supplier_id") VALUES ('Skicaky vetsi, made in China', 560 * .2, 3);
 
-INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (10, 80, 'S', 50);
-INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (11, 90, 'L', 45);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (24, 80, 'S', 50);
+INSERT INTO "sketch" ("product_id", "weight", "size", "quantity") VALUES (25, 90, 'L', 45);
 
 -- used bcrypt with 4 iterations, random passwords
-INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
+INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode", "birth_number")
 VALUES ('sony@mail.cz', '$2a$04$KGnvHtOiSxaeIdwUhxQNqu7QAjKU8.h939qezQdQPQaO2FPsOVJVm', 'Sony', 'Nguyen', '125745632',
-        'Macharova', 'Olomouc', 77900);
-INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
+        'Macharova', 'Olomouc', 77900, '990310/7313');
+INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode", "birth_number")
 VALUES ('joe@email.cz', '$2a$04$kl8SshrJ5ZDOY6BOqMo3aetzUHMlq8R2nviN.bY33N32gk504kn8K', 'Joe', 'Novak', '741528963',
-        'Novakova', 'Brno', 77200);
+        'Novakova', 'Brno', 77200, '7010137464');
 INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
 VALUES ('franta@jozka.cz', '$2a$04$Kacb/3HfcjBVBMfPwuQivusx3nXg1Xax0HpoaI5.wqmojRMn6pKDu', 'Frantisek', 'Jemenek',
         '789523632', 'Bratislavska', 'Prerov', 77800);
-INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
+INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode", "birth_number")
 VALUES ('jana.kolarova@kolar.cz', '$2a$04$FkfGBxae7Ic2VBcrm9VI6eZRqTYC3CIXbI7/.EQPLOqmX4jfaD.oK', 'Jana', 'Kolarova',
-        '+420585696363', 'nam. Republiky', 'Olomouc', 74802);
+        '+420585696363', 'nam. Republiky', 'Olomouc', 74802, '7209027056');
 INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
 VALUES
   ('roman.maxmilian@kolar.cz', '$2a$04$9Co7Bf7ohM.fX4GBO9VCkeiuBgW5TRGz3v3pRbJsjZR0CN/LKZiqS', 'Roman', 'Maxmilian',
@@ -212,10 +224,10 @@ INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone"
 VALUES
   ('petram@seznam.cz', '$2a$04$CtIBCZmTE1IS0PlZ8AE2c.Y3rcRUWyXh5WW55B6YcEqNtjeI/2fHC', 'Petra', 'Moudra', '789456123',
    'Masarykova', 'Prerov', 78950);
-INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
+INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode", "birth_number")
 VALUES
   ('karel@seznam.cz', '$2a$04$1WhGfU335qo7hP0pchy4k.DyswQqYxJ/qVepJov.CiqpF3GzDvTD2', 'Karel', 'Karlovic', '589624859',
-   'Modra', 'Brno', 7604);
+   'Modra', 'Brno', 7604, '9954143254');
 INSERT INTO "user" ("email", "password_hash", "first_name", "last_name", "phone", "street", "city", "postcode")
 VALUES
   ('pavel.kohout@abc.cz', '$2a$04$ffqhhOdWrHqT61OBt0iFZuyvFNqW4JHlRbYoOY8PGpkDpevChqXMq', 'Pavel', 'Kohout',
