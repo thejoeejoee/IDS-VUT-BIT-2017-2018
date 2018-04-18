@@ -353,3 +353,89 @@ INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (1,
 INSERT INTO "rating" ("mark", "description", "user_id", "product_id")
 VALUES (5, 'totalni katastrofa, nedoporucuji!', 3, 3);
 INSERT INTO "rating" ("mark", "description", "user_id", "product_id") VALUES (2, 'celkem dobry produkt', 4, 4);
+
+-- 1.dotaz - kterou pastelku dodava ktery dodavatel
+SELECT
+  p."name",
+  s."name"
+
+FROM "crayon" c
+  JOIN "product" p ON p."id" = c."product_id"
+  JOIN "supplier" s ON s."id" = p."supplier_id";
+
+-- 2.dotaz - ke kazdemu hodnoceni nazev produktu a jeho znamku
+SELECT
+  p."name",
+  r."description",
+  r."mark"
+
+FROM "rating" r
+  JOIN "product" p ON r."product_id" = p."id"
+  JOIN "user" u ON r."user_id" = u."id";
+
+-- 3.dotaz - ke kazdemu hodnoceni pastelky vypsat dodavelete, delku, nazev a znamku jakou dostala
+SELECT
+  u."last_name",
+  p."name",
+  c."length",
+  r."description",
+  r."mark"
+
+FROM  "crayon" c
+  INNER JOIN "product" p ON p."id" = c."product_id"
+  INNER JOIN "rating" r ON r."product_id" = p."id"
+  INNER JOIN "user" u ON u."id" = r."id";
+
+--- 4.dotaz - ke kazdemu skicaku prumer znamek a pocet hodnoceni
+SELECT
+  p."name",
+  AVG(r."mark") prumer_znamek,
+  COUNT(r."product_id") pocet_hodnoceni
+
+FROM "sketch" s
+  INNER JOIN "product" p ON s."product_id" = p."id"
+  INNER JOIN "rating" r ON p."id" = r."product_id"
+
+GROUP BY p."id", p."name";
+
+-- 5.dotaz - ke kazde objednavce pocet ruznych polozek
+SELECT
+  o."id" id_objednavky,
+  COUNT(o2."order_id") pocet_polozek
+
+FROM "order" o
+  INNER JOIN "order_item" o2 ON o."id" = o2."order_id"
+
+GROUP BY o."id";
+
+-- 6.dotaz - vsechni dodavatele, kteri maji ke svemu produktu alespon 1 hodnoceni a zaroven maji mezeru ve jmene
+SELECT
+  s."name"
+
+FROM "supplier" s
+
+WHERE s."name" LIKE '% %' AND EXISTS(
+    SELECT 1 FROM "rating"
+      INNER JOIN "product" p ON s."id" = p."supplier_id"
+);
+
+-- 7.dotaz - vsechny uzivatele kteri si obejdnali alespon 1 nadprumerne drahou objednavku
+select
+  "first_name",
+  "last_name"
+from "user"
+where "user"."id" IN (
+  select "order"."user_id"
+  from "order"
+    inner join "order_item" on "order"."id" = "order_item"."order_id"
+    inner join "product" on "product"."id" = "order_item"."product_id"
+  GROUP BY "order"."id", "order"."user_id"
+  having SUM("price" * "quantity") > (
+
+    select AVG(SUM("price" * "quantity"))
+    from "order"
+      inner join "order_item" on "order"."id" = "order_item"."order_id"
+      inner join "product" on "product"."id" = "order_item"."product_id"
+    GROUP BY "order"."id"
+  )
+);
