@@ -1,0 +1,104 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[czech] {babel}
+\usepackage[pdftex]{graphicx}
+\usepackage{gensymb}
+\usepackage{amsmath}
+\usepackage{ulem}
+\usepackage{svg}
+\usepackage{mathtools}
+
+\setlength{\hoffset}{-1.8cm} 
+\setlength{\voffset}{-2cm}
+\setlength{\textheight}{24.0cm} 
+\setlength{\textwidth}{17cm}
+
+
+%\usepackage[total={18cm,25cm}, top=2cm, left=2cm, includefoot]{geometry}
+
+\begin{document}
+	
+	% UVODNI STRANA
+	\begin{titlepage}
+	\begin{figure}
+	\centering
+ 	\includegraphics[scale=1.0]{obr/logo.eps}
+	\end{figure}
+	
+	\begin{LARGE}
+ 	\ \ \ \ \ \ \ \ \ VYSOKÉ UČENÍ TECHNICKÉ V BRNĚ
+	\end{LARGE}\\
+	
+	\begin{Large}
+	\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Fakulta informačních technologií
+	\end{Large}\\\\\\\\\\\\\\\\\\\
+
+ 	\begin{Huge}
+ 	\ \ \ Internetový obchod s pastelkami a skicáky
+	\end{Huge}
+	\\
+	
+	\begin{Large}
+	\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Dokumentace k projektu IDS
+	\end{Large}\\\\\\\\\\\\\\\\\\\
+	
+	\vfill \center Josef Kolář, Iva Kavánková \qquad \qquad \qquad \qquad \qquad \qquad \qquad Brno, 23. dubna 2018
+
+	\end{titlepage}
+	
+	
+	\newpage
+	\large
+	\noindent \begin{Large} \textbf{{Obsah}} \end{Large}\\
+ 	
+	\begin{itemize}
+	\item Popis zadání	
+	\item Triggery
+	\item Procedury
+	\item Explain plan
+	\item Přístupová práva
+	\item Materializovaný pohled
+	\end{itemize}
+	
+	
+
+	\newpage
+	\large
+	
+	\noindent \begin{Large} \textbf{{Popis zadání}} \end{Large}\\
+	\\
+	\indent Cílem je vytvoření jednoduché aplikace pro internetový obchod s pastelkami a skicáky. Návštěvníci si mohou pomocí internetového rozhraní prohlížet veškerý sortiment obchodu. Pastelky mohou lišit podle typu (obyčejné, progresso, voskovky, ...) a délky, počtu pastelek v balení, atd. Skicáky se dělí podle gramáže, velikosti, počtu papírů, apod. Pokud má návštěvník zájem o určitý produkt/y, může si jej vybrat (vložením do nákupního košíku). U registrovaných zákazníků, kteří jsou do systému přihlášeni, zůstává informace o vybraném zboží v košíku uložena a při opětovném přihlášení znovu načtena. Zákazník si může zboží objednat po zadání potřebných údajů (kontakt, doprava, ...). Zákazníci mohou jednotlivé zboží hodnotit a psát na něj recenze. V systému jsou uloženy také základní údaje o dodavatelích pro opětovné přiobjednání dalšího zboží. Zaměstnanci mohou nahlédnout do statistik oblíbenosti a prodejnosti zboží.  \\
+	\\
+	\\
+	\noindent \begin{Large} \textbf{{Triggery}} \end{Large} \\
+	\\
+	První trigger automaticky generuje sekvenci do sloupce order\_item.order, jestliže právě tento sloupec není zadaný. Čehož využívá PK tabulky order\_item. \\
+Druhý trigger zabraňuje vzniku prázdných objednávek, tzn. ve chvíli smazání objednávky, zkontroluje, jestli neexistují nějaké prázdné objednávky a ty případně smaže.
+	\\
+	\\
+	\noindent \begin{Large} \textbf{{Procedury}} \end{Large} \\
+	\\
+	První procedura vezme položky zdrojové objednávky a nakopíruje je do cílové objednávky. Dochází k plytké kopii, tudíž samotné produkty zůstávají identické. Cílová objednávka musí existovat, jinak je notifikována pomocí výjimky. \\
+Druhá procedura maže uživatele, pro které neexistuje v evidenci žádná objednávka. \\
+	\\
+	\\
+	\noindent \begin{Large} \textbf{{Explain plan}} \end{Large} \\
+	\\
+	nevim
+	\\
+	\\
+	\noindent \begin{Large} \textbf{{Přístupová práva}} \end{Large} \\
+	\\
+	Zde došlo k předání přístupových práv uživatelem XKAVAN05 uživateli XKOLAR71, který má pak možnost zasílat dotazy typu SELECT tabulky user, order, order\_item, product.
+	\\
+	\\
+	\noindent \begin{Large} \textbf{{Materializovaný pohled}} \end{Large} \\
+	\\
+	Zde byl vytvořen materializovaný pohled na tabulkami uživatele XKAVAN05 z účtu uživatele XKOLAR71. Následuje SQL dotaz, který ukazuje použití tohoto materializovaného pohledu.
+	\\
+	\\
+	
+
+	
+	
+\end{document}
