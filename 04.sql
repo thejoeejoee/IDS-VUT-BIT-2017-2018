@@ -5,7 +5,6 @@ CREATE OR REPLACE TRIGGER order_item_bi__auto_order_generator
   FOR EACH ROW
   DECLARE
     v_max_order "order_item"."order"%TYPE;
-
   BEGIN
     if :new."order" IS NULL -- only if is not set
     then
@@ -34,11 +33,30 @@ CREATE OR REPLACE TRIGGER order_item_ad__empty_order_cleaner
     );
   END;
 
-
+-- example for first trigger
 insert into "order_item" ("order_id", "product_id", "quantity") values (1, 12, 3);
+-- example for second trigger
+insert into "order" ("user_id") values (1);
+insert into "order_item" ("order_id", "product_id") values (
+  (
+    select max("id") + 1
+    from "order"
+  ),
+  1
+);
+delete "order_item"
+where "order" = (
+  select max("order")
+  from "order_item"
+  where "order_id" = (
+    select max("id") + 1
+    from "order"
+  )
+) AND "order_id" = (select max("id") + 1
+                    from "order");
 
--- TODO: example for second, create single item order and delete order_item
 
+-- procedure for copying order items from source order to target order
 create or replace procedure copy_order_items(
   source_order_id IN "order"."id"%TYPE,
   target_order_id IN "order"."id"%TYPE
@@ -91,6 +109,9 @@ create or replace procedure copy_order_items(
     WHEN e_target_same_as_source
     then
       DBMS_OUTPUT.PUT_LINE('Target order cannot be same as source order.');
+    WHEN OTHERS
+    THEN
+      DBMS_OUTPUT.PUT_LINE(SQLCODE || SQLERRM);
   end;
 
 begin
@@ -98,6 +119,7 @@ begin
   copy_order_items(1, 2);
 end;
 
+  -- procedure for deleting users without order
 create or replace procedure delete_users_without_orders is
   begin
     DELETE "user"
@@ -115,29 +137,39 @@ end;
 -- where type = 'TRIGGER';
 
 
+-- optimizing queries
 explain plan for
-select
-  "first_name",
-  "last_name"
-from "user"
-where "user"."id" IN (
-  select "order"."user_id"
-  from "order"
-    inner join "order_item" on "order"."id" = "order_item"."order_id"
-    inner join "product" on "product"."id" = "order_item"."product_id"
-  GROUP BY "order"."id", "order"."user_id"
-  having SUM("price" * "quantity") > (
-
-    select AVG(SUM("price" * "quantity"))
-    from "order"
-      inner join "order_item" on "order"."id" = "order_item"."order_id"
-      inner join "product" on "product"."id" = "order_item"."product_id"
-    GROUP BY "order"."id"
-  )
-);
+SELECT
+  "supplier"."name",
+  count(DISTINCT "user"."id")
+FROM "supplier"
+  INNER JOIN "product" ON "supplier"."id" = "product"."supplier_id"
+  INNER JOIN "order_item" ON "product"."id" = "order_item"."product_id"
+  INNER JOIN "order" ON "order_item"."order_id" = "order"."id"
+  INNER JOIN "user" ON "order"."user_id" = "user"."id"
+WHERE "user"."city" = 'Brno'
+GROUP BY "supplier"."name";
 
 select *
-from PLAN_TABLE;
+from TABLE (DBMS_XPLAN.display);
+
+create index user_city_index
+  on "user" ("city");
+
+explain plan for
+select
+  "supplier"."name",
+  count(DISTINCT "user"."id")
+from "supplier"
+  inner join "product" on "supplier"."id" = "product"."supplier_id"
+  inner join "order_item" on "product"."id" = "order_item"."product_id"
+  inner join "order" on "order_item"."order_id" = "order"."id"
+  inner join "user" on "order"."user_id" = "user"."id"
+where "user"."city" = 'Brno'
+group by "supplier"."name";
+
+select *
+from TABLE (DBMS_XPLAN.display);
 
 -- from xkavan05 connection
 grant select on XKAVAN05.USER to XKOLAR71;
